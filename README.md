@@ -3,7 +3,7 @@
 Aplicación móvil de escaneo de códigos QR con autenticación biométrica desarrollada con Flutter y módulos nativos en Android (Kotlin).
 
 ## Pantallas
-| Autenticación Biométrica | Home | Detalle QR |Escaneo de QR |
+| Biométrico | Home | Detalle QR |Escaneo de QR |
 |--------------------------|------|------------|-----------------|
 | ![Biometric](assets/screens/auth.png)| ![Home](assets/screens/qr_stored.png) | ![Detalle](assets/screens/qr_detail.png) |![QR Scan](assets/screens/qr_scan.png)
 

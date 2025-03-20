@@ -5,8 +5,8 @@ import 'data/repositories/auth_repository_impl.dart';
 import 'data/repositories/qr_repository_impl.dart';
 import 'presentation/bloc/auth/auth_bloc.dart';
 import 'presentation/bloc/qr/qr_bloc.dart';
-import 'presentation/pages/splash_page.dart';
 import 'package:flutter/services.dart';
+import 'core/router/app_router.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,10 +33,10 @@ class MyApp extends StatelessWidget {
   final QrRepositoryImpl qrRepository;
   
   const MyApp({
-    Key? key, 
+    super.key, 
     required this.authRepository, 
     required this.qrRepository
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
           create: (context) => QrBloc(qrRepository),
         ),
       ],
-      child: MaterialApp(
+      child: MaterialApp.router(
         title: 'QR Scanner App',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
           useMaterial3: true,
         ),
-        home: const SplashPage(),
+        routerConfig: AppRouter.router,
       ),
     );
   }

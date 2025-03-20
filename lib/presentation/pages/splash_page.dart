@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:developer' as developer;
 import '../bloc/auth/auth_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'auth_page.dart';
 
 class SplashPage extends StatefulWidget {
@@ -51,11 +52,7 @@ class _SplashPageState extends State<SplashPage> {
         
         if (state is BiometricAvailabilityState) {
           developer.log('SplashPage - Biometría disponible: ${state.isAvailable}', name: 'SplashPage');
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(
-              builder: (_) => AuthPage(isBiometricAvailable: state.isAvailable),
-            ),
-          );
+          context.pushReplacement('/auth?biometric=${state.isAvailable}');
         } else if (state is AuthLoading) {
           developer.log('SplashPage - Estado de carga detectado', name: 'SplashPage');
         } else if (state is AuthFailure) {

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import '../bloc/qr/qr_bloc.dart';
-import 'qr_scanner_page.dart';
-import 'qr_detail_page.dart';
+
 import 'dart:developer' as developer;
+import 'package:go_router/go_router.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -25,11 +25,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _navigateToScannerPage() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => const QrScannerPage(),
-      ),
-    ).then((_) => _loadQrCodes());
+    context.push('/home/scan');
   }
 
   void _deleteQrCode(int id) {
@@ -85,11 +81,7 @@ class _HomePageState extends State<HomePage> {
                       onPressed: () => _deleteQrCode(qrCode.id!),
                     ),
                     onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => QrDetailPage(qrCode: qrCode),
-                        ),
-                      );
+                      context.push('/home/detail', extra: qrCode);
                     },
                   ),
                 );

@@ -5,7 +5,7 @@ import '../bloc/qr/qr_bloc.dart';
 import 'package:intl/intl.dart';
 import 'dart:developer' as developer;
 import '../../domain/entities/qr_code.dart';
-import 'qr_scanner_page.dart';
+import 'package:go_router/go_router.dart';
 
 class QrResultPage extends StatelessWidget {
   final QrCode qrCode;
@@ -16,6 +16,14 @@ class QrResultPage extends StatelessWidget {
   Widget build(BuildContext context) {
     developer.log('QrResultPage - build', name: 'QrResultPage');
     final dateFormat = DateFormat('dd/MM/yyyy HH:mm');
+    returnHome() {
+      context.read<QrBloc>().add(LoadQrCodes());
+      if (context.canPop()) {
+        context.pop();
+      } else {
+        context.go('/home');
+      }
+    }
 
     return WillPopScope(
       onWillPop: () async {
@@ -23,9 +31,9 @@ class QrResultPage extends StatelessWidget {
           'QrResultPage - Botón de retroceso presionado',
           name: 'QrResultPage',
         );
-        context.read<QrBloc>().add(LoadQrCodes());
+
         // Indicar que se debe recargar la lista
-        Navigator.of(context).pop(true);
+        returnHome();
         return false;
       },
       child: Scaffold(
@@ -35,10 +43,7 @@ class QrResultPage extends StatelessWidget {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
-              context.read<QrBloc>().add(LoadQrCodes());
-              Navigator.of(
-                context,
-              ).pop(true); // Indicar que se debe recargar la lista
+              returnHome(); 
             },
           ),
         ),
@@ -71,7 +76,10 @@ class QrResultPage extends StatelessWidget {
                         const SizedBox(height: 16),
                         Text(
                           'Escaneado: ${dateFormat.format(qrCode.scannedAt)}',
-                          style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey[600],
+                          ),
                         ),
                       ],
                     ),
@@ -96,17 +104,13 @@ class QrResultPage extends StatelessWidget {
                   ),
                   ElevatedButton.icon(
                     onPressed: () {
-                      Navigator.of(context).pop(true);
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const QrScannerPage()),
-                  );
+                      context.pushReplacement('/home/scan');
                     },
                     icon: const Icon(Icons.qr_code_scanner),
                     label: const Text('Escanear Otro'),
                   ),
                 ],
               ),
-              
             ],
           ),
         ),

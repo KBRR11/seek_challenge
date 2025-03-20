@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:developer' as developer;
 import '../bloc/qr/qr_bloc.dart';
-import 'qr_result_page.dart';
+import 'package:go_router/go_router.dart';
 
 class QrScannerPage extends StatefulWidget {
-  const QrScannerPage({Key? key}) : super(key: key);
+  const QrScannerPage({super.key});
 
   @override
   State<QrScannerPage> createState() => _QrScannerPageState();
@@ -14,7 +13,7 @@ class QrScannerPage extends StatefulWidget {
 
 class _QrScannerPageState extends State<QrScannerPage> {
   late final QrBloc _qrBloc;
-  
+
   @override
   void initState() {
     super.initState();
@@ -37,6 +36,15 @@ class _QrScannerPageState extends State<QrScannerPage> {
     super.dispose();
   }
 
+  returnHome(){
+    _qrBloc.add(LoadQrCodes());
+        if (context.canPop()) {
+          context.pop();
+        } else {
+          context.go('/home');
+        }
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -47,8 +55,9 @@ class _QrScannerPageState extends State<QrScannerPage> {
         // Esperar un momento para asegurarse de que los recursos se liberan
         await Future.delayed(const Duration(milliseconds: 100));
         // Devolver true para permitir la navegación de retorno
-        Navigator.of(context).pop(true); // Indicar que se escaneó un QR
-        return false; // No permitir que WillPopScope maneje la navegación
+        returnHome();
+        
+        return false;
       },
       child: Scaffold(
         appBar: AppBar(
@@ -57,26 +66,28 @@ class _QrScannerPageState extends State<QrScannerPage> {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
-              developer.log('Botón de retroceso en AppBar presionado', name: 'QrScannerPage');
+              developer.log(
+                'Botón de retroceso en AppBar presionado',
+                name: 'QrScannerPage',
+              );
               _qrBloc.add(StopQrScan());
               // Esperar un momento para asegurarse de que los recursos se liberan
               Future.delayed(const Duration(milliseconds: 100), () {
-                Navigator.of(context).pop(true); // Indicar que se escaneó un QR
+                returnHome();
               });
             },
           ),
         ),
         body: BlocConsumer<QrBloc, QrState>(
           listener: (context, state) {
-            developer.log('Estado del bloc: ${state.runtimeType}', name: 'QrScannerPage');
-            
+            developer.log(
+              'Estado del bloc: ${state.runtimeType}',
+              name: 'QrScannerPage',
+            );
+
             if (state is QrCodeSaved) {
               // Cuando se detecta y guarda un código QR, ir a la página de resultado
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(
-                  builder: (_) => QrResultPage(qrCode: state.qrCode),
-                ),
-              );
+              context.pushReplacement('/home/result', extra: state.qrCode);
             } else if (state is QrError) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text('Error: ${state.message}')),
@@ -85,9 +96,7 @@ class _QrScannerPageState extends State<QrScannerPage> {
           },
           builder: (context, state) {
             if (state is QrLoading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
+              return const Center(child: CircularProgressIndicator());
             } else if (state is QrScanStarted) {
               // Si tenemos un ID de textura, mostrar la vista previa de la cámara
               if (state.textureId != null) {
@@ -131,16 +140,12 @@ class _QrScannerPageState extends State<QrScannerPage> {
                 );
               } else {
                 // Si el ID de textura es nulo, mostrar mensaje de error
-                return const Center(
-                  child: Text('Error al iniciar la cámara'),
-                );
+                return const Center(child: Text('Error al iniciar la cámara'));
               }
             }
-            
+
             // Estado por defecto
-            return const Center(
-              child: Text('Preparando cámara...'),
-            );
+            return const Center(child: Text('Preparando cámara...'));
           },
         ),
       ),

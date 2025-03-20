@@ -6,7 +6,7 @@ import '../../domain/entities/qr_code.dart';
 class QrDetailPage extends StatelessWidget {
   final QrCode qrCode;
   
-  const QrDetailPage({Key? key, required this.qrCode}) : super(key: key);
+  const QrDetailPage({super.key, required this.qrCode});
 
   @override
   Widget build(BuildContext context) {
