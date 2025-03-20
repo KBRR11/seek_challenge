@@ -39,7 +39,9 @@ void main() {
     blocTest<QrBloc, QrState>(
       'emits [QrLoading, QrScanStarted] when scan starts successfully',
       build: () {
-        when(mockQrRepository.startQrScanner()).thenAnswer((_) async {});
+        when(mockQrRepository.startQrScanner()).thenAnswer((_) async {
+          return null;
+        });
         return qrBloc;
       },
       act: (bloc) => bloc.add(StartQrScan()),
@@ -80,7 +82,6 @@ void main() {
   });
 
   group('SaveQrCode', () {
-    final qrCode = QrCode(content: 'Test QR Code', scannedAt: DateTime.now());
 
     final savedQrCode = QrCode(
       id: 1,

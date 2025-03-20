@@ -33,7 +33,7 @@ class _QrScannerPageState extends State<QrScannerPage> {
   void dispose() {
     developer.log('QrScannerPage - dispose', name: 'QrScannerPage');
     // Usamos la referencia guardada en initState
-    _qrBloc.add(StopQrScan());
+    // _qrBloc.add(StopQrScan());
     super.dispose();
   }
 

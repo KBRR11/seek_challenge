@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import '../bloc/qr/qr_bloc.dart';
 import 'qr_scanner_page.dart';
 import 'qr_detail_page.dart';
+import 'dart:developer' as developer;
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -44,6 +45,7 @@ class _HomePageState extends State<HomePage> {
       ),
       body: BlocBuilder<QrBloc, QrState>(
         builder: (context, state) {
+          developer.log('ESTADO: $state', name: 'HOME WIDGET');
           if (state is QrLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is QrCodesLoaded) {

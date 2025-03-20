@@ -21,8 +21,9 @@ Aplicación móvil de escaneo de códigos QR con autenticación biométrica desa
 
 ## Requisitos previos
 
-- Flutter SDK 2.19.0 o superior
-- Android SDK 21 o superior
+- Flutter SDK 3.29.0
+- Dart SDK 3.7.0
+- Android SDK 21 (mínimo) → Recomendado: 33 o superior
 - Kotlin 1.7.10 o superior
 - Dispositivo con soporte para biometría (para probar todas las funcionalidades)
 
@@ -66,7 +67,7 @@ lib/
     └── pages/           # Páginas de la UI
 
 android/
-└── app/src/main/kotlin/com/example/qr_scanner_app/
+└── app/src/main/kotlin/com/example/seek_challenge/
     ├── MainActivity.kt           # Actividad principal
     ├── QRScannerModule.kt        # Módulo nativo para escaneo QR
     ├── QRCodeAnalyzer.kt         # Analizador de códigos QR
@@ -89,8 +90,25 @@ android/
 
 Para ejecutar las pruebas unitarias:
 ```bash
-flutter test
+flutter test test/presentation/bloc/auth_bloc_test.dart  
+flutter test test/presentation/bloc/qr_bloc_test.dart  
 ```
+
+## Evidencia
+Evidencia de Test Auth.  
+![Auth Test](assets/evidencia/auth_test.png)
+```
+kenyramirez@Kenys-MacBook-Pro seek_challenge % flutter test test/presentation/bloc/auth_bloc_test.dart
+00:04 +12: All tests passed! 
+```
+
+Evidencia de Test QR.  
+![QR Test](assets/evidencia/qr_scan_test.png)
+```
+kenyramirez@Kenys-MacBook-Pro seek_challenge % flutter test test/presentation/bloc/qr_bloc_test.dart             
+00:04 +11: All tests passed! 
+```
+
 
 ## Notas de implementación
 

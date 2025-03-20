@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../bloc/qr/qr_bloc.dart';
 import 'package:intl/intl.dart';
 import 'dart:developer' as developer;
 import '../../domain/entities/qr_code.dart';
@@ -21,6 +23,7 @@ class QrResultPage extends StatelessWidget {
           'QrResultPage - Botón de retroceso presionado',
           name: 'QrResultPage',
         );
+        context.read<QrBloc>().add(LoadQrCodes());
         // Indicar que se debe recargar la lista
         Navigator.of(context).pop(true);
         return false;
@@ -32,6 +35,7 @@ class QrResultPage extends StatelessWidget {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
+              context.read<QrBloc>().add(LoadQrCodes());
               Navigator.of(
                 context,
               ).pop(true); // Indicar que se debe recargar la lista
